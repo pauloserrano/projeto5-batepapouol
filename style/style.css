@@ -1,0 +1,87 @@
+*{
+    box-sizing: border-box;
+}
+
+ion-icon{
+    transition: .2s all linear;
+}
+
+body{
+    background-color: #f3f3f3;
+    min-height: 100vh;
+    font-family: 'Roboto', sans-serif;
+}
+
+body.mobile-width{
+    width: 375px;
+}
+
+header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    position: sticky;
+    top: 0;
+    background-color: white;
+    font-size: 48px;
+    padding: 16px 24px;
+}
+
+main.messages-container div {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 12px 8px;
+    margin-bottom: 4px;
+    font-size: 14px;
+    background-color: white;
+}
+
+.messages-container .status{
+    background-color: #dcdcdc;
+}
+
+.messages-container .private{
+    background-color: #FFDEDE;
+}
+
+form{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 0 16px;
+    background-color: white;
+    /* position: fixed;
+    bottom: 0; */
+}
+
+form textarea{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 28px 0;
+    border: transparent;
+    resize: none;
+}
+
+form textarea:focus{
+    outline: transparent;
+}
+
+form textarea, form textarea::placeholder{
+    font-style: italic;
+    font-size: 16px;
+    color: black;
+    font-family: 'Roboto', sans-serif;
+}
+
+form ion-icon{
+    font-size: 26px;
+    cursor: pointer;
+}
+
+form ion-icon:hover{
+    filter: opacity(.8);
+}
