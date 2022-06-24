@@ -36,6 +36,37 @@ function setConnection(){
 }
 
 
+async function getParticipants(){
+    const response = await axios.get(url.participants)
+    return response.data
+}
+
+
+function setParticipants(participants){
+    const liContainer = aside.querySelector('.participants')
+    liContainer.innerHTML = `
+        <li class="selected">
+            <ion-icon name="people"></ion-icon>
+            <span>Todos</span>
+            <ion-icon name="checkmark-outline"></ion-icon>
+        </li>`
+    participants.forEach(participant => {
+        liContainer.innerHTML += `
+            <li>
+                <ion-icon name="person-circle"></ion-icon>
+                <span>${participant.name}</span>
+                <ion-icon name="checkmark-outline"></ion-icon>
+            </li>`
+    })
+}
+
+
+async function updateParticipants(){
+    const participants = await getParticipants()
+    setParticipants(participants)
+}
+
+
 async function getMessages(){
     const response = await axios.get(url.messages)
     // console.log(response)
@@ -114,10 +145,12 @@ function capitalize(str){
     return capitalizedStr
 }
 
-login()
+// login()
 updateMessages()
 // setInterval(updateMessages, 3000)
-
+updateParticipants()
+setInterval(updateParticipants, 3000)
+axios.get(url.participants).then(res => console.log(res))
 
 // EVENTS
 asideBtn.addEventListener('click', () => {

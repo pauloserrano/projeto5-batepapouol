@@ -31,6 +31,10 @@ header{
     z-index: 1;
 }
 
+header ion-icon{
+    cursor: pointer;
+}
+
 ul.messages-container{
     width: 100%;
     height: calc(100vh - 85px - 80px);
@@ -108,8 +112,8 @@ form ion-icon{
     cursor: pointer;
 }
 
-form ion-icon:hover{
-    filter: opacity(.8);
+form ion-icon:hover, header ion-icon:hover, aside ul li:hover *{
+    filter: opacity(.7);
 }
 
 .overlay{
@@ -120,9 +124,12 @@ form ion-icon:hover{
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.6);
     z-index: 2;
+    opacity: 1;
+    transition: all linear .2s;
 }
 
 .overlay.hidden{
+    opacity: 0;
     display: none;
 }
 
@@ -130,17 +137,21 @@ aside{
     display: flex;
     flex-direction: column;
     max-width: 260px;
-    padding: 20px;
+    padding: 24px;
     position: fixed;
     top: 0;
     right: 0;
     bottom: 0;
     background: white;
     z-index: 3;
+    transform: translateX(0);
+    transition: all linear .3s;
 }
 
 aside.hidden{
+    opacity: 0;
     display: none;
+    transform: translateX(100%);
 }
 
 aside div, aside ul{
@@ -153,10 +164,16 @@ aside div {
     line-height: 1.2em;
 }
 
+aside ul.participants{
+    max-height: 50vh;
+    overflow-y: auto;
+}
+
 aside ul li{
     display: flex;
     align-items: center;
     margin-bottom: 8px;
+    cursor: pointer;
 }
 
 aside ul li.selected ion-icon:last-child{
