@@ -1,35 +1,51 @@
-const url = "https://mock-api.driven.com.br/api/v6/uol/messages"
-const messagesContainer = document.querySelector('main.messages-container')
-const messages = [
-    {
-        from: "felipe",
-        text: "entra na sala...",
-        time: "01:58:22",
-        to: "Todos",
-        type: "status"
-    },
-    {
-        from: "felipe",
-        text: "entra na sala...",
-        time: "01:58:22",
-        to: "Todos",
-        type: "message"
-    },
-    {
-        from: "felipe",
-        text: "entra na sala...",
-        time: "01:58:22",
-        to: "Todos",
-        type: "private_message"
-    }
+// HTML ELEMENTS
+const messagesContainer = document.querySelector('ul.messages-container')
+const sendBtn = document.querySelector('form ion-icon')
+const textArea = document.querySelector('form textarea')
 
-]
+
+// VARIABLES
+let username
+const url = {
+    messages: "https://mock-api.driven.com.br/api/v6/uol/messages",
+    participants: "https://mock-api.driven.com.br/api/v6/uol/participants",
+    status: "https://mock-api.driven.com.br/api/v6/uol/status"
+}
+
+
+// FUNCTIONS
+function login(){
+    username = 'prompt("Qual seu nome?")'
+
+    const promise = axios.post(url.participants, {name: username})
+    
+    promise
+        .then(() => setConnection())
+        .catch(login)
+}
+
+
+function setConnection(){
+    setInterval(() => {
+        // console.log(username)
+        axios.post(url.status, {name: username})
+    }, 5000)
+}
 
 
 async function getMessages(){
-    const response = await axios.get(url)
-    console.log(response.data)
+    const response = await axios.get(url.messages)
+    // console.log(response)
     return response.data
+}
+
+
+function postMessage(text){
+    const from = username
+    const to = 'Todos'
+    const type = 'message'
+
+    const promise = axios.post(url.messages, {from, to, text, type})
 }
 
 
@@ -43,32 +59,38 @@ function setMessages(messages){
 
         if (type === 'status'){
             messagesContainer.innerHTML += `
-            <div class="${type}">
+            <li class="${type}">
                 <span><span class="time">(${time})</span> <strong>${from}</strong> ${text}</span>
-            </div>
+            </li>
         `
         
         } else if (type === 'private_message'){
             messagesContainer.innerHTML += `
-            <div class="${type}">
+            <li class="${type}">
                 <span><span class="time">(${time})</span> <strong>${from}</strong> reservadamente para <strong>${to}</strong>: ${text}</span>
-            </div>
+            </li>
         `
         
         } else {
             messagesContainer.innerHTML += `
-            <div class="${type}">
+            <li class="${type}">
                 <span><span class="time">(${time})</span> <strong>${from}</strong> para <strong>${to}</strong>: ${text}</span>
-            </div>
+            </li>
         `
         }
     })
 }
 
-
 async function updateMessages(){
     const messages = await getMessages()
     setMessages(messages)
+    scrollToLast()
+}
+
+
+function scrollToLast(){
+    const lastMessage = messagesContainer.querySelector('li:last-child')
+    lastMessage.scrollIntoView()
 }
 
 
@@ -89,4 +111,12 @@ function capitalize(str){
     return capitalizedStr
 }
 
+login()
 updateMessages()
+setInterval(updateMessages, 3000)
+
+
+// EVENTS
+sendBtn.addEventListener('click', () => {
+    postMessage(textArea.value)
+})

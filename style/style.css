@@ -21,6 +21,7 @@ header{
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    height: 85px;
     position: fixed;
     top: 0;
     background-color: white;
@@ -30,12 +31,18 @@ header{
     z-index: 1;
 }
 
-main.messages-container{
-    padding-top: 115px;
-    padding-bottom: 90px;
+ul.messages-container{
+    width: 100%;
+    height: calc(100vh - 85px - 80px);
+    position: relative;
+    top: 85px;
+    padding-top: 35px;
+    padding-bottom: 10px;
+    overflow-y: scroll;
+    /* scroll-behavior: smooth; */
 }
 
-main.messages-container div {
+ul.messages-container li {
     display: flex;
     align-items: center;
     width: 100%;
@@ -43,6 +50,11 @@ main.messages-container div {
     margin-bottom: 4px;
     font-size: 14px;
     background-color: white;
+}
+
+ul.messages-container li > span{
+    word-break: break-all;
+    line-height: 1.25em;
 }
 
 .messages-container .time{
