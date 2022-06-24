@@ -9,7 +9,7 @@ const textArea = document.querySelector('form textarea')
 
 // VARIABLES
 let username
-let messages
+let messages = []
 const url = {
     messages: "https://mock-api.driven.com.br/api/v6/uol/messages",
     participants: "https://mock-api.driven.com.br/api/v6/uol/participants",
@@ -104,16 +104,15 @@ async function updateParticipants(){
 
 async function getMessages(){
     const response = await axios.get(url.messages)
-    messages = response.data
-    // console.log(response)
+
     return response.data
 }
 
 
 function postMessage(text){
     const from = username
-    const to = 'Todos'
-    const type = 'message'
+    const to = getMessageRecipient()
+    const type = getMessageType()
 
     axios.post(url.messages, {from, to, text, type})
         .then(updateMessages)
@@ -121,27 +120,37 @@ function postMessage(text){
 }
 
 
+function getMessageRecipient(){
+    return aside.querySelector('aside .participants .selected span').innerHTML
+}
+
+
+function getMessageType(){
+    const selectedType = aside.querySelector('aside .message-type .selected span').innerHTML
+    
+    if (selectedType === 'Público'){
+        return 'message'
+    
+    } else if (selectedType === 'Reservadamente'){
+        return 'private_message'
+    }
+}
+
+
 function setMessages(messages){
     messages.forEach(message => {
-        const from = message.from
-        const to = message.to
-        const text = message.text
-        const time = message.time
-        const type = message.type
-
-
-        if (type === 'status'){
+        if (message.type === 'status'){
             messagesContainer.innerHTML += `
-            <li class="${type}">
-                <span><span class="time">(${time})</span> <strong>${from}</strong> ${text}</span>
+            <li class="${message.type}">
+                <span><span class="time">(${message.time})</span> <strong>${capitalize(message.from)}</strong> ${message.text}</span>
             </li>
             `
         
-        } else if (type === 'private_message'){
-            if (to === username){
+        } else if (message.type === 'private_message'){
+            if (message.to === username || message.from === username){
                 messagesContainer.innerHTML += `
-                <li class="${type}">
-                    <span><span class="time">(${time})</span> <strong>${capitalize(from)}</strong> reservadamente para <strong>${capitalize(to)}</strong>: ${text}</span>
+                <li class="${message.type}">
+                    <span><span class="time">(${message.time})</span> <strong>${capitalize(message.from)}</strong> reservadamente para <strong>${capitalize(message.to)}</strong>: ${message.text}</span>
                 </li>
                 `
             
@@ -149,8 +158,8 @@ function setMessages(messages){
         
         } else {
             messagesContainer.innerHTML += `
-            <li class="${type}">
-                <span><span class="time">(${time})</span> <strong>${capitalize(from)}</strong> para <strong>${capitalize(to)}</strong>: ${text}</span>
+            <li class="${message.type}">
+                <span><span class="time">(${message.time})</span> <strong>${capitalize(message.from)}</strong> para <strong>${capitalize(message.to)}</strong>: ${message.text}</span>
             </li>
             `
         }
@@ -158,15 +167,45 @@ function setMessages(messages){
 }
 
 async function updateMessages(){
-    const messages = await getMessages()
-    setMessages(messages)
-    scrollToLast()
+    const apiMessages = await getMessages()
+
+    if (messages.length === 0){
+        messages = apiMessages
+        setMessages(messages)
+    
+    } else if (newMessage(apiMessages)){
+        const newMessageIndex = apiMessages.findIndex(message => message[message.length - 1])
+        const newMessages = apiMessages.slice(newMessageIndex)
+        newMessages.forEach(message => {
+            messages.push(message)
+        })
+        setMessages(newMessages)
+    }
+
+    scrollToLastMessage()
 }
 
 
-function scrollToLast(){
+function newMessage(apiMessages){
+    const apiMsg = apiMessages[apiMessages.length - 1]
+    const localMsg = messages[messages.length - 1]
+
+    const sameMsg = (
+        apiMsg.from === localMsg.from && 
+        apiMsg.text === localMsg.text &&
+        apiMsg.time === localMsg.time &&
+        apiMsg.to === localMsg.to &&
+        apiMsg.type === localMsg.type
+    )
+
+    return !sameMsg
+}
+
+
+function scrollToLastMessage(){
     const lastMessage = messagesContainer.querySelector('li:last-child')
-    lastMessage.scrollIntoView()
+    
+    if (lastMessage) lastMessage.scrollIntoView()
 }
 
 
@@ -214,9 +253,11 @@ textArea.addEventListener('keyup', (e) => {
 
 // Init
 
-// login()
+login()
 updateMessages()
-// setInterval(updateMessages, 3000)
+setInterval(updateMessages, 3000)
+
 updateParticipants()
 // setInterval(updateParticipants, 10000)
+
 setMessageTypeEvent()
