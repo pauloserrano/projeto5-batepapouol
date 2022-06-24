@@ -111,3 +111,67 @@ form ion-icon{
 form ion-icon:hover{
     filter: opacity(.8);
 }
+
+.overlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 2;
+}
+
+.overlay.hidden{
+    display: none;
+}
+
+aside{
+    display: flex;
+    flex-direction: column;
+    max-width: 260px;
+    padding: 20px;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: white;
+    z-index: 3;
+}
+
+aside.hidden{
+    display: none;
+}
+
+aside div, aside ul{
+    margin-bottom: 2em;
+}
+
+aside div {
+    font-weight: bold;
+    text-align: center;
+    line-height: 1.2em;
+}
+
+aside ul li{
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+aside ul li.selected ion-icon:last-child{
+    display: initial;
+}
+
+aside ion-icon{
+    font-size: 24px;
+    margin-right: 8px;
+}
+
+aside ion-icon:last-child{
+    --ionicon-stroke-width: 5em;
+    display: none;
+    margin-left: auto;
+    color: #28BB25;
+    font-size: 1em;
+}

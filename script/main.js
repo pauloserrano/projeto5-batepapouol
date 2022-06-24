@@ -1,5 +1,8 @@
 // HTML ELEMENTS
 const messagesContainer = document.querySelector('ul.messages-container')
+const asideBtn = document.querySelector('header ion-icon')
+const aside = document.querySelector('aside')
+const overlay = document.querySelector('.overlay')
 const sendBtn = document.querySelector('form ion-icon')
 const textArea = document.querySelector('form textarea')
 
@@ -45,7 +48,7 @@ function postMessage(text){
     const to = 'Todos'
     const type = 'message'
 
-    const promise = axios.post(url.messages, {from, to, text, type})
+    axios.post(url.messages, {from, to, text, type})
 }
 
 
@@ -113,10 +116,21 @@ function capitalize(str){
 
 login()
 updateMessages()
-setInterval(updateMessages, 3000)
+// setInterval(updateMessages, 3000)
 
 
 // EVENTS
+asideBtn.addEventListener('click', () => {
+    aside.classList.remove('hidden')
+    overlay.classList.remove('hidden')
+})
+
+overlay.addEventListener('click', () => {
+    aside.classList.add('hidden')
+    overlay.classList.add('hidden')
+})
+
 sendBtn.addEventListener('click', () => {
     postMessage(textArea.value)
+    textArea.value = ""
 })

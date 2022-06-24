@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="./style/style.css">
 </head>
 <body>
+    <div class="overlay hidden"></div>
     <header>
         <img src="./assets/images/logo-small.jpg" alt="uol">
         <ion-icon name="people"></ion-icon>
@@ -18,6 +19,29 @@
         <textarea placeholder="Escreva aqui..." cols="1" rows="1"></textarea>
         <ion-icon name="paper-plane-outline"></ion-icon>
     </form>
+    <aside class="hidden">
+        <div>Escolha um contato para enviar mensagem:</div>
+        <ul>
+            <li>
+                <ion-icon name="people"></ion-icon>
+                <span>Todos</span>
+                <ion-icon name="checkmark-outline"></ion-icon>
+            </li>
+        </ul>
+        <div>Escolha a visibilidade:</div>
+        <ul>
+            <li>
+                <ion-icon name="lock-open"></ion-icon>
+                <span>Público</span>
+                <ion-icon name="checkmark-outline"></ion-icon>
+            </li>
+            <li>
+                <ion-icon name="lock-closed"></ion-icon>
+                <span>Reservadamente</span>
+                <ion-icon name="checkmark-outline"></ion-icon>
+            </li>
+        </ul>
+    </aside>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule="" src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.js"></script>
