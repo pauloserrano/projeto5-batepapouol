@@ -45,14 +45,14 @@ async function getParticipants(){
 function setParticipants(participants){
     const liContainer = aside.querySelector('.participants')
     liContainer.innerHTML = `
-        <li class="selected">
+        <li class="selected" data-identifier="participant">
             <ion-icon name="people"></ion-icon>
             <span>Todos</span>
             <ion-icon name="checkmark-outline"></ion-icon>
         </li>`
     participants.forEach(participant => {
         liContainer.innerHTML += `
-            <li>
+            <li data-identifier="participant">
                 <ion-icon name="person-circle"></ion-icon>
                 <span>${participant.name}</span>
                 <ion-icon name="checkmark-outline"></ion-icon>
@@ -96,21 +96,24 @@ function setMessages(messages){
             <li class="${type}">
                 <span><span class="time">(${time})</span> <strong>${from}</strong> ${text}</span>
             </li>
-        `
+            `
         
         } else if (type === 'private_message'){
-            messagesContainer.innerHTML += `
-            <li class="${type}">
-                <span><span class="time">(${time})</span> <strong>${from}</strong> reservadamente para <strong>${to}</strong>: ${text}</span>
-            </li>
-        `
+            if (to === username){
+                messagesContainer.innerHTML += `
+                <li class="${type}">
+                    <span><span class="time">(${time})</span> <strong>${from}</strong> reservadamente para <strong>${to}</strong>: ${text}</span>
+                </li>
+                `
+            
+            } else {console.log(message)}
         
         } else {
             messagesContainer.innerHTML += `
             <li class="${type}">
                 <span><span class="time">(${time})</span> <strong>${from}</strong> para <strong>${to}</strong>: ${text}</span>
             </li>
-        `
+            `
         }
     })
 }
@@ -145,12 +148,13 @@ function capitalize(str){
     return capitalizedStr
 }
 
-// login()
+
+login()
 updateMessages()
-// setInterval(updateMessages, 3000)
+setInterval(updateMessages, 3000)
 updateParticipants()
-setInterval(updateParticipants, 3000)
-axios.get(url.participants).then(res => console.log(res))
+// setInterval(updateParticipants, 10000)
+
 
 // EVENTS
 asideBtn.addEventListener('click', () => {
@@ -167,3 +171,12 @@ sendBtn.addEventListener('click', () => {
     postMessage(textArea.value)
     textArea.value = ""
 })
+
+textArea.addEventListener('keyup', (e) => {
+    const enterPressed = e.keyCode === 13
+    if (enterPressed){
+        postMessage(textArea.value)
+        textArea.value = ""
+    }
+})
+
