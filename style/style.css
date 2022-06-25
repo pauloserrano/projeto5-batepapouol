@@ -78,7 +78,8 @@ form{
     align-items: center;
     width: 100%;
     height: 80px;
-    padding: 0 16px;
+    padding: 28px 16px 0;
+    margin-bottom: 1.5em;
     background-color: white;
     position: fixed;
     bottom: 0;
@@ -87,7 +88,7 @@ form{
 
 form textarea, form textarea::placeholder{
     font-style: italic;
-    font-size: 16px;
+    font-size: 18px;
     color: black;
     font-family: 'Roboto', sans-serif;
 }
@@ -96,8 +97,7 @@ form textarea{
     display: flex;
     align-items: center;
     width: 100%;
-    height: 100%;
-    padding: 28px 0;
+    position: relative;
     border: transparent;
     resize: none;
     box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.05);
@@ -107,8 +107,16 @@ form textarea:focus{
     outline: transparent;
 }
 
+form .message-recipient {
+    position: absolute;
+    bottom: -1.25em;
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 14px;
+    pointer-events: none;
+}
+
 form ion-icon{
-    font-size: 26px;
+    font-size: 32px;
     cursor: pointer;
 }
 

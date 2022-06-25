@@ -5,6 +5,7 @@ const aside = document.querySelector('aside')
 const overlay = document.querySelector('.overlay')
 const sendBtn = document.querySelector('form ion-icon')
 const textArea = document.querySelector('form textarea')
+const messageRecipient = document.querySelector('.message-recipient')
 
 
 // VARIABLES
@@ -70,10 +71,10 @@ function setParticipantsEvent(){
     allParticipants.forEach(participant => {
         participant.addEventListener('click', () => {
             const selected = document.querySelector('aside .participants .selected')
-
             if (selected !== participant) {
                 selected.classList.remove('selected')
                 participant.classList.add('selected')
+                setMessageRecipient()
             }
         })
     })
@@ -90,6 +91,7 @@ function setMessageTypeEvent(){
             if (selected !== type) {
                 selected.classList.remove('selected')
                 type.classList.add('selected')
+                setMessageRecipient()
             }
         })
     })
@@ -122,6 +124,13 @@ function postMessage(text){
 
 function getMessageRecipient(){
     return aside.querySelector('aside .participants .selected span').innerHTML
+}
+
+function setMessageRecipient(){
+    const recipient = document.querySelector('aside .participants .selected span').innerHTML
+    const type = document.querySelector('aside .message-type .selected span').innerHTML
+
+    messageRecipient.innerHTML = `Enviando para ${capitalize(recipient)} (${type.toLowerCase()})`
 }
 
 
@@ -176,9 +185,11 @@ async function updateMessages(){
     } else if (newMessage(apiMessages)){
         const newMessageIndex = apiMessages.findIndex(message => message[message.length - 1])
         const newMessages = apiMessages.slice(newMessageIndex)
+        
         newMessages.forEach(message => {
             messages.push(message)
         })
+        
         setMessages(newMessages)
     }
 
@@ -197,7 +208,7 @@ function newMessage(apiMessages){
         apiMsg.to === localMsg.to &&
         apiMsg.type === localMsg.type
     )
-
+    console.log({newMsg: !sameMsg})
     return !sameMsg
 }
 
@@ -251,13 +262,13 @@ textArea.addEventListener('keyup', (e) => {
 })
 
 
-// Init
-
-login()
+/* INIT */
+// login()
 updateMessages()
 setInterval(updateMessages, 3000)
 
 updateParticipants()
-// setInterval(updateParticipants, 10000)
+setInterval(updateParticipants, 10000)
 
+// Público ou Reservado
 setMessageTypeEvent()
