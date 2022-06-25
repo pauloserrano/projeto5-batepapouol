@@ -241,6 +241,7 @@ aside div {
 aside ul.participants{
     max-height: 50vh;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 aside ul li{

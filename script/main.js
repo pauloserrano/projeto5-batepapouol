@@ -29,6 +29,15 @@ function login(user){
             username = user
             setLoadingScreen()
             setConnection()
+            /* INIT */
+            updateMessages()
+            setInterval(updateMessages, 3000)
+
+            updateParticipants()
+            setInterval(updateParticipants, 10000)
+
+            // Público ou Reservado
+            setMessageTypeEvent()
         })
         .catch(() => {
             alert('Usuário já logado ou inválido. \nTente novamente.')
@@ -43,7 +52,7 @@ function setLoadingScreen() {
 
     login.classList.add('hidden')
     loading.classList.remove('hidden')
-
+    
     setInterval(() => loginScreen.remove(), 2000)
 }
 
@@ -63,23 +72,68 @@ async function getParticipants(){
 
 function setParticipants(participants){
     const liContainer = aside.querySelector('.participants')
-
-    liContainer.innerHTML = `
-        <li class="selected" data-identifier="participant">
-            <ion-icon name="people"></ion-icon>
-            <span>Todos</span>
-            <ion-icon name="checkmark-outline"></ion-icon>
-        </li>
-        `
-
-    participants.forEach(participant => {
-        liContainer.innerHTML += `
-            <li data-identifier="participant">
-                <ion-icon name="person-circle"></ion-icon>
-                <span>${participant.name}</span>
+    const isEmpty = !(liContainer.childNodes.length > 0)
+    
+    if (isEmpty){
+        liContainer.innerHTML = `
+            <li class="selected" data-identifier="participant">
+                <ion-icon name="people"></ion-icon>
+                <span>Todos</span>
                 <ion-icon name="checkmark-outline"></ion-icon>
-            </li>`
-    })
+            </li>
+            `
+    
+        participants.forEach(participant => {
+            liContainer.innerHTML += `
+                <li data-identifier="participant">
+                    <ion-icon name="person-circle"></ion-icon>
+                    <span>${participant.name}</span>
+                    <ion-icon name="checkmark-outline"></ion-icon>
+                </li>
+                `
+        })
+        
+    } else {
+        let selected = liContainer.querySelector('.selected span').innerHTML
+
+        liContainer.innerHTML = `
+            <li data-identifier="participant">
+                <ion-icon name="people"></ion-icon>
+                <span>Todos</span>
+                <ion-icon name="checkmark-outline"></ion-icon>
+            </li>
+            `
+
+        participants.forEach(participant => {
+            const isOnline = capitalize(participant.name) === selected
+
+            if (isOnline){
+                liContainer.innerHTML += `
+                    <li class="selected" data-identifier="participant">
+                        <ion-icon name="person-circle"></ion-icon>
+                        <span>${participant.name}</span>
+                        <ion-icon name="checkmark-outline"></ion-icon>
+                    </li>
+                    `
+            
+            } else {
+                liContainer.innerHTML += `
+                    <li data-identifier="participant">
+                        <ion-icon name="person-circle"></ion-icon>
+                        <span>${participant.name}</span>
+                        <ion-icon name="checkmark-outline"></ion-icon>
+                    </li>
+                    `
+            }
+        })
+
+        const isSelected = liContainer.querySelector('.selected')
+
+        if (!isSelected){
+            const todos = liContainer.querySelector('li')
+            todos.classList.add('selected')
+        }
+    }
 
     setParticipantsEvent()
 }
@@ -104,6 +158,7 @@ function setParticipantsEvent(){
 async function updateParticipants(){
     const participants = await getParticipants()
     setParticipants(participants)
+    setMessageRecipient()
 }
 
 
@@ -258,10 +313,10 @@ function capitalize(str){
 }
 
 // EVENTS
-// loginBtn.addEventListener('click', () => {
-//     const username = document.querySelector('.login input').value
-//     login(username)
-// })
+loginBtn.addEventListener('click', () => {
+    const username = document.querySelector('.login input').value
+    login(username)
+})
 
 asideBtn.addEventListener('click', () => {
     aside.classList.remove('hidden')
@@ -285,14 +340,3 @@ textArea.addEventListener('keyup', (e) => {
         textArea.value = ""
     }
 })
-
-
-/* INIT */
-updateMessages()
-setInterval(updateMessages, 3000)
-
-updateParticipants()
-setInterval(updateParticipants, 10000)
-
-// Público ou Reservado
-setMessageTypeEvent()
