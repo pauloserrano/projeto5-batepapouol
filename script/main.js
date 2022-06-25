@@ -63,7 +63,6 @@ async function getParticipants(){
 
 function setParticipants(participants){
     const liContainer = aside.querySelector('.participants')
-    // const previousRecipient = liContainer.querySelector('.selected').innerHTML
 
     liContainer.innerHTML = `
         <li class="selected" data-identifier="participant">
@@ -259,10 +258,10 @@ function capitalize(str){
 }
 
 // EVENTS
-loginBtn.addEventListener('click', () => {
-    const username = document.querySelector('.login input').value
-    login(username)
-})
+// loginBtn.addEventListener('click', () => {
+//     const username = document.querySelector('.login input').value
+//     login(username)
+// })
 
 asideBtn.addEventListener('click', () => {
     aside.classList.remove('hidden')
