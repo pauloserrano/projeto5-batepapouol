@@ -1,4 +1,5 @@
 // HTML ELEMENTS
+const loginBtn = document.querySelector('.login button')
 const messagesContainer = document.querySelector('ul.messages-container')
 const asideBtn = document.querySelector('header ion-icon')
 const aside = document.querySelector('aside')
@@ -10,6 +11,7 @@ const messageRecipient = document.querySelector('.message-recipient')
 
 // VARIABLES
 let username
+let selectedRecipient = 'Todos'
 let messages = []
 const url = {
     messages: "https://mock-api.driven.com.br/api/v6/uol/messages",
@@ -19,13 +21,30 @@ const url = {
 
 
 // FUNCTIONS
-function login(){
-    username = 'prompt("Qual seu nome?")'
-    const promise = axios.post(url.participants, {name: username})
+function login(user){
+    const promise = axios.post(url.participants, {name: user})
     
     promise
-        .then(() => setConnection())
-        .catch(login)
+        .then(() => {
+            username = user
+            setLoadingScreen()
+            setConnection()
+        })
+        .catch(() => {
+            alert('Usuário já logado ou inválido. \nTente novamente.')
+        })
+}
+
+
+function setLoadingScreen() {
+    const loginScreen = document.querySelector('.login-screen')
+    const login = loginScreen.querySelector('.login')
+    const loading = loginScreen.querySelector('.loading')
+
+    login.classList.add('hidden')
+    loading.classList.remove('hidden')
+
+    setInterval(() => loginScreen.remove(), 2000)
 }
 
 
@@ -44,13 +63,15 @@ async function getParticipants(){
 
 function setParticipants(participants){
     const liContainer = aside.querySelector('.participants')
+    // const previousRecipient = liContainer.querySelector('.selected').innerHTML
 
     liContainer.innerHTML = `
         <li class="selected" data-identifier="participant">
             <ion-icon name="people"></ion-icon>
             <span>Todos</span>
             <ion-icon name="checkmark-outline"></ion-icon>
-        </li>`
+        </li>
+        `
 
     participants.forEach(participant => {
         liContainer.innerHTML += `
@@ -81,6 +102,12 @@ function setParticipantsEvent(){
 }
 
 
+async function updateParticipants(){
+    const participants = await getParticipants()
+    setParticipants(participants)
+}
+
+
 function setMessageTypeEvent(){
     const messageTypes = document.querySelectorAll('aside .message-type li')
 
@@ -95,12 +122,6 @@ function setMessageTypeEvent(){
             }
         })
     })
-}
-
-
-async function updateParticipants(){
-    const participants = await getParticipants()
-    setParticipants(participants)
 }
 
 
@@ -208,7 +229,7 @@ function newMessage(apiMessages){
         apiMsg.to === localMsg.to &&
         apiMsg.type === localMsg.type
     )
-    console.log({newMsg: !sameMsg})
+
     return !sameMsg
 }
 
@@ -238,6 +259,11 @@ function capitalize(str){
 }
 
 // EVENTS
+loginBtn.addEventListener('click', () => {
+    const username = document.querySelector('.login input').value
+    login(username)
+})
+
 asideBtn.addEventListener('click', () => {
     aside.classList.remove('hidden')
     overlay.classList.remove('hidden')
@@ -263,7 +289,6 @@ textArea.addEventListener('keyup', (e) => {
 
 
 /* INIT */
-// login()
 updateMessages()
 setInterval(updateMessages, 3000)
 

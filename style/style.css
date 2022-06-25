@@ -10,11 +10,77 @@ strong{
     font-weight: bold;
 }
 
+aside.hidden,
+.overlay.hidden,
+.login-screen .login.hidden,
+.login-screen .loading.hidden
+{
+    display: none;
+}
+
 body{
     min-height: 100vh;
     background-color: #f3f3f3;
     font-family: 'Roboto', sans-serif;
 }
+
+.login-screen{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: white;
+    z-index: 5;
+}
+
+.login-screen img{
+    width: 130px;
+}
+
+.login-screen > img{
+    margin: 15vh 0;
+}
+
+
+.login-screen .login, .login-screen .loading{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 260px;
+}
+
+.login-screen * > *{
+    margin-bottom: 1.5rem;
+    font-size: 18px;
+}
+
+.login-screen .login input{
+    width: 100%;
+    padding: 16px 8px;
+    border-radius: 5px;
+    border: 1px solid #d7d7d7;
+    text-align: center;
+}
+
+.login-screen .login button{
+    border: transparent;
+    border-radius: 5px;
+    background-color: #e7e7e7;
+    color: #696969;
+    padding: .8em 1.5em;
+    outline: transparent;
+    cursor: pointer;
+}
+
+.login-screen .loading img{
+    width: 100px;
+    margin-bottom: 2rem;
+}
+
 
 header{
     display: flex;
@@ -27,6 +93,7 @@ header{
     background-color: white;
     font-size: 48px;
     padding: 16px 24px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05);
     z-index: 1;
 }
@@ -37,13 +104,13 @@ header ion-icon{
 
 ul.messages-container{
     width: 100%;
-    height: calc(100vh - 85px - 80px);
+    height: calc(100vh - 85px - 105px);
     position: relative;
     top: 85px;
     padding-top: 35px;
     padding-bottom: 10px;
     overflow-y: scroll;
-    /* scroll-behavior: smooth; */
+    scroll-behavior: smooth;
 }
 
 ul.messages-container li {
@@ -54,6 +121,10 @@ ul.messages-container li {
     margin-bottom: 4px;
     font-size: 14px;
     background-color: white;
+}
+
+ul.messages-container li ion-icon{
+    flex-shrink: 0;
 }
 
 ul.messages-container li > span{
@@ -84,13 +155,19 @@ form{
     position: fixed;
     bottom: 0;
     z-index: 1;
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.05);
 }
 
 form textarea, form textarea::placeholder{
-    font-style: italic;
     font-size: 18px;
     color: black;
     font-family: 'Roboto', sans-serif;
+}
+
+form textarea::placeholder{
+    font-style: italic;
+    padding: 20px;
 }
 
 form textarea{
@@ -100,7 +177,6 @@ form textarea{
     position: relative;
     border: transparent;
     resize: none;
-    box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.05);
 }
 
 form textarea:focus{
@@ -120,8 +196,12 @@ form ion-icon{
     cursor: pointer;
 }
 
-form ion-icon:hover, header ion-icon:hover, aside ul li:hover *{
+form ion-icon:hover, 
+header ion-icon:hover, 
+aside ul li:hover *, 
+.login-screen .login button:hover{
     filter: opacity(.7);
+    transition: .2s linear all;
 }
 
 .overlay{
@@ -134,11 +214,6 @@ form ion-icon:hover, header ion-icon:hover, aside ul li:hover *{
     z-index: 2;
     opacity: 1;
     transition: all linear .2s;
-}
-
-.overlay.hidden{
-    opacity: 0;
-    display: none;
 }
 
 aside{
@@ -156,11 +231,6 @@ aside{
     transition: all linear .3s;
 }
 
-aside.hidden{
-    opacity: 0;
-    display: none;
-    transform: translateX(100%);
-}
 
 aside div, aside ul{
     margin-bottom: 2em;
@@ -199,4 +269,11 @@ aside ion-icon:last-child{
     margin-left: auto;
     color: #28BB25;
     font-size: 1em;
+}
+
+
+@media (max-width: 300px){
+    aside{
+        max-width: 80%;
+    }
 }
