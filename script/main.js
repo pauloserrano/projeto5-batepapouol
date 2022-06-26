@@ -338,13 +338,15 @@ overlay.addEventListener('click', () => {
 })
 
 sendBtn.addEventListener('click', () => {
-    postMessage(textArea.value)
-    textArea.value = ""
+    if (textArea.value !== ''){
+        postMessage(textArea.value)
+        textArea.value = ''
+    }
 })
 
 textArea.addEventListener('keyup', (e) => {
     const enterPressed = e.keyCode === 13
-    if (enterPressed){
+    if (enterPressed && textArea.value !== ''){
         postMessage(textArea.value)
         textArea.value = ""
     }
