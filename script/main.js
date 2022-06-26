@@ -1,4 +1,5 @@
 // HTML ELEMENTS
+const loginInput = document.querySelector('.login input')
 const loginBtn = document.querySelector('.login button')
 const messagesContainer = document.querySelector('ul.messages-container')
 const asideBtn = document.querySelector('header ion-icon')
@@ -316,6 +317,14 @@ function capitalize(str){
 loginBtn.addEventListener('click', () => {
     const username = document.querySelector('.login input').value
     login(username)
+})
+
+loginInput.addEventListener('keyup', (e) => {
+    const enterPressed = e.keyCode === 13
+    if (enterPressed){
+        const username = document.querySelector('.login input').value
+        login(username)
+    }
 })
 
 asideBtn.addEventListener('click', () => {
