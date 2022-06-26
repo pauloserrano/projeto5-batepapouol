@@ -87,7 +87,7 @@ function setParticipants(participants){
             liContainer.innerHTML += `
                 <li data-identifier="participant">
                     <ion-icon name="person-circle"></ion-icon>
-                    <span>${participant.name}</span>
+                    <span>${capitalize(participant.name)}</span>
                     <ion-icon name="checkmark-outline"></ion-icon>
                 </li>
                 `
@@ -111,7 +111,7 @@ function setParticipants(participants){
                 liContainer.innerHTML += `
                     <li class="selected" data-identifier="participant">
                         <ion-icon name="person-circle"></ion-icon>
-                        <span>${participant.name}</span>
+                        <span>${capitalize(participant.name)}</span>
                         <ion-icon name="checkmark-outline"></ion-icon>
                     </li>
                     `
@@ -120,7 +120,7 @@ function setParticipants(participants){
                 liContainer.innerHTML += `
                     <li data-identifier="participant">
                         <ion-icon name="person-circle"></ion-icon>
-                        <span>${participant.name}</span>
+                        <span>${capitalize(participant.name)}</span>
                         <ion-icon name="checkmark-outline"></ion-icon>
                     </li>
                     `
